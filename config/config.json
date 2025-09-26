@@ -1,0 +1,5 @@
+{
+  "api_key": "your_api_key_here",
+  "threshold": 0.8,
+  "penalty": 1.0
+}

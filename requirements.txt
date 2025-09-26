@@ -1,0 +1,11 @@
+yt-dlp
+openai-whisper
+torch
+transformers
+sentence-transformers
+konlpy
+srt
+ruptures
+opencv-python
+scenedetect[opencv]
+scenedetect[pyav]
