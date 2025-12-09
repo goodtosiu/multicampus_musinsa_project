@@ -84,3 +84,6 @@
 2028331, (1062, "Duplicate entry '2028331' for key 'product_bottom.PRIMARY'")
 5120993, (1062, "Duplicate entry '5120993' for key 'product_bottom.PRIMARY'")
 5046727, (1062, "Duplicate entry '5046727' for key 'product_bottom.PRIMARY'")
+4719011, Failed to perform, curl: (23) Failure writing output to destination, passed 13 returned 0. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.
+4719869, Failed to perform, curl: (23) Failure writing output to destination, passed 13 returned 0. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.
+3758715, Failed to perform, curl: (23) Failure writing output to destination, passed 13 returned 0. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.
