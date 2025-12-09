@@ -16,6 +16,13 @@ class RDSClient:
         db_port = os.getenv('DB_PORT', 3306)
         db_name = os.getenv('DB_NAME')
         
+        print("DB HOST:", db_host)
+        print("DB USER:", db_user)
+        print("DB PASSWORD:", db_password)
+        print("DB NAME:", db_name)
+        print("DB PORT:", db_port)
+
+
         # 특수문자가 비밀번호에 있을 경우 URL 인코딩 필요할 수 있음
         self.db_url = f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 
@@ -68,3 +75,4 @@ class RDSClient:
         # with 블록을 빠져나가면 connection.close()가 자동 호출되어 Pool로 반납됨
 
         return result_data
+    
