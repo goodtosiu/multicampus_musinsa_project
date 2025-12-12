@@ -9,31 +9,23 @@ load_dotenv()
 class RDSClient:
     def __init__(self):
         # 1. DB URL 생성 (mysql+mysqlconnector 드라이버 사용)
-        # 형식: mysql+driver://user:password@host:port/dbname
         db_user = os.getenv('DB_USER')
         db_password = os.getenv('DB_PASSWORD')
         db_host = os.getenv('DB_HOST')
         db_port = os.getenv('DB_PORT', 3306)
         db_name = os.getenv('DB_NAME')
-        
-        print("DB HOST:", db_host)
-        print("DB USER:", db_user)
-        print("DB PASSWORD:", db_password)
-        print("DB NAME:", db_name)
-        print("DB PORT:", db_port)
-
 
         # 특수문자가 비밀번호에 있을 경우 URL 인코딩 필요할 수 있음
         self.db_url = f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 
         try:
-            # 2. 엔진 생성 (이때 풀이 자동으로 설정됨)
+            # 2. 엔진 생성
             self.engine = create_engine(
                 self.db_url,
-                pool_size=5,        # 풀 크기 설정
-                max_overflow=10,    # 풀이 꽉 찼을 때 추가로 허용할 연결 수
-                pool_recycle=3600,  # 연결 재사용 주기(초)
-                echo=False          # 쿼리 로그 출력 여부
+                pool_size=5,
+                max_overflow=10,
+                pool_recycle=3600,
+                echo=False
             )
             print("✅ DB Engine (Pool) 생성 완료")
         except Exception as e:
@@ -42,8 +34,7 @@ class RDSClient:
 
     def execute(self, query, params=None):
         """
-        SQLAlchemy Engine을 사용하여 쿼리 실행.
-        Context Manager(with)를 통해 연결의 획득/반납을 자동 처리.
+        단일 쿼리 실행 및 단일 커밋 (기존 함수)
         """
         if not self.engine:
             print("DB 엔진이 초기화되지 않았습니다.")
@@ -52,27 +43,64 @@ class RDSClient:
         result_data = None
 
         try:
-            # 3. 연결 획득 (Pool에서 가져옴) 및 트랜잭션 시작
             with self.engine.connect() as connection:
-                # 텍스트 쿼리를 실행 가능한 객체로 변환
                 stmt = text(query)
-                
-                # 4. 쿼리 실행
-                # params가 튜플/리스트라면 그대로, 딕셔너리라면 바인딩
                 result = connection.execute(stmt, params or {})
 
-                # 5. 결과 처리
-                if result.returns_rows: # SELECT 문인 경우
-                    # 딕셔너리 형태로 변환하여 리스트로 반환
+                if result.returns_rows:
                     result_data = [dict(row) for row in result.mappings()]
-                else: # INSERT, UPDATE, DELETE 인 경우
-                    connection.commit() # 변경사항 확정
+                else:
+                    connection.commit()
                     result_data = result.rowcount
 
         except SQLAlchemyError as e:
             print(f"⚠️ 쿼리 실행 에러: {e}")
         
-        # with 블록을 빠져나가면 connection.close()가 자동 호출되어 Pool로 반납됨
-
         return result_data
     
+    # ⭐️ 추가된 배치 삽입 함수
+    def execute_batch(self, query, params_list):
+        """
+        대량의 데이터를 효율적으로 삽입하기 위한 배치 삽입 함수.
+        하나의 트랜잭션과 하나의 execute 호출로 여러 행을 처리합니다.
+
+        Args:
+            query (str): 삽입 쿼리 (예: INSERT INTO table (a, b) VALUES (:a, :b))
+            params_list (list): 바인딩할 파라미터 딕셔너리들의 리스트.
+                                (예: [{'a': 1, 'b': 10}, {'a': 2, 'b': 20}, ...])
+        
+        Returns:
+            int: 영향을 받은 총 행의 개수 (성공 시) 또는 None (실패 시)
+        """
+        if not self.engine:
+            print("DB 엔진이 초기화되지 않았습니다.")
+            return None
+        
+        if not params_list:
+            print("삽입할 데이터(params_list)가 비어 있습니다.")
+            return 0
+
+        total_rows = 0
+        
+        try:
+            # 1. 연결 획득 및 트랜잭션 시작
+            with self.engine.connect() as connection:
+                stmt = text(query)
+                
+                # 2. execute 호출 시 파라미터 리스트를 전달하여 배치 실행
+                result = connection.execute(stmt, params_list)
+                
+                # 3. 한 번의 커밋으로 모든 변경사항 확정
+                connection.commit()
+                
+                total_rows = result.rowcount
+                print(f"✅ 배치 삽입 성공! 총 {total_rows}개 행 삽입.")
+                
+        except SQLAlchemyError as e:
+            print(f"❌ 배치 쿼리 실행 에러: {e}")
+            # 배치 삽입 실패 시 자동으로 롤백됩니다.
+            return None
+            
+        return total_rows
+
+# (클래스 정의 끝)

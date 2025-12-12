@@ -15,3 +15,4 @@ python-dotenv
 PyMySQL
 webdriver-manager
 curl_cffi
+tqdm
