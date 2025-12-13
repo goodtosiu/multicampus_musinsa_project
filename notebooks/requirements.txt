@@ -14,4 +14,8 @@ opencv-python
 python-dotenv
 PyMySQL
 webdriver-manager
-cloudscraper
+curl_cffi
+open-clip-torch
+Pillow
+requests
+tqdm
