@@ -1,14 +1,3 @@
-### 1. 새 가상 환경 생성 및 활성화
-python -m venv venv
-source venv/bin/activate  # Mac/Linux
-venv\Scripts\activate   # Windows
-
-### 2. 패키지 설치
-pip install -r requirements.txt
-
-### 3. ERD
-###https://dbdiagram.io/d/musinsa-693cfc52e877c63074ad5427
-
 # 👕 무신사 토탈아웃핏 추천 시스템 (Musinsa Total Outfit Recommendation)
 
 무신사의 방대한 상품 데이터를 분석하여 사용자의 패션 성향(16가지 페르소나)을 진단하고, 텍스트와 이미지 임베딩을 결합한 하이브리드 추천 엔진을 통해 최적의 토탈 아웃핏을 제안하는 프로젝트입니다.
@@ -43,7 +32,8 @@ Tools: DBML, Docker
 
 데이터 중복을 최소화하고 무결성을 유지하기 위해 **제3정규화(3NF)**를 적용했습니다.
 
-ERD 구조 (DBML)
+### ERD 구조 (DBML)
+https://dbdiagram.io/d/musinsa-693cfc52e877c63074ad5427
 
 categories: 상/하위 카테고리 간의 이행적 함수 종속 제거
 
