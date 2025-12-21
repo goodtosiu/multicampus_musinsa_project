@@ -6,11 +6,11 @@ venv\Scripts\activate   # Windows
 # 2. 패키지 설치
 pip install -r requirements.txt
 
-👕 무신사 토탈아웃핏 추천 시스템 (Musinsa Total Outfit Recommendation)
+# 👕 무신사 토탈아웃핏 추천 시스템 (Musinsa Total Outfit Recommendation)
 
 무신사의 방대한 상품 데이터를 분석하여 사용자의 패션 성향(16가지 페르소나)을 진단하고, 텍스트와 이미지 임베딩을 결합한 하이브리드 추천 엔진을 통해 최적의 토탈 아웃핏을 제안하는 프로젝트입니다.
 
-🚀 주요 기능 (Key Features)
+# 🚀 주요 기능 (Key Features)
 
 Fashion Persona Test: 간단한 설문을 통해 사용자를 16가지 패션 유형 중 하나로 분류합니다.
 
@@ -24,7 +24,7 @@ Outfit Expansion: 배정된 페르소나의 대표 아웃핏 5종을 기준으�
 
 High-Performance DB: 제3정규화(3NF)가 적용된 스키마와 Redis 캐싱을 통해 대량의 벡터 연산을 지연 없이 처리합니다.
 
-🛠 기술 스택 (Tech Stack)
+# 🛠 기술 스택 (Tech Stack)
 
 Language: Python 3.9+
 
@@ -36,7 +36,7 @@ AI/ML: Sentence-Transformers (S-BERT), OpenAI CLIP, NumPy, Scikit-learn
 
 Tools: DBML, Docker
 
-📊 데이터베이스 설계 (Database Design)
+# 📊 데이터베이스 설계 (Database Design)
 
 데이터 중복을 최소화하고 무결성을 유지하기 위해 **제3정규화(3NF)**를 적용했습니다.
 
@@ -52,7 +52,7 @@ product_styles: 다중 스타일 태그를 별도 행으로 분리 (1NF 준수)
 
 persona_items: 페르소나별 대표 아이템 매핑 정보 관리
 
-🧠 추천 알고리즘 원리 (Recommendation Logic)
+# 🧠 추천 알고리즘 원리 (Recommendation Logic)
 
 1. 하이브리드 임베딩 (Hybrid Embedding)
 
@@ -88,19 +88,7 @@ In-Memory Caching: 빈번하게 조회되는 임베딩 벡터를 Redis에 적재
 
 Data Pre-processing: cumulative_sales 등 문자열 데이터를 INT 타입으로 정규화하여 정렬 연산 속도를 개선했습니다.
 
-📂 프로젝트 구조 (Project Structure)
-
-├── database/
-│   ├── schema.sql         # 3NF 테이블 생성 스크립트
-│   └── migration.sql      # 기존 데이터 정규화 이관 쿼리
-├── models/
-│   ├── text_encoder.py    # S-BERT 임베딩 로직
-│   └── image_encoder.py   # CLIP 임베딩 로직
-├── core/
-│   ├── recommendation.py  # 코사인 유사도 연산 엔진
-│   └── cache_manager.py   # Redis 연결 및 캐싱 전략
-├── main.py                # 서비스 엔트리 포인트
-└── README.md
+# 📂 프로젝트 구조 (Project Structure)
 
 
 이 프로젝트는 무신사 크롤링 데이터를 기반으로 한 교육 및 포트폴리오 목적으로 제작되었습니다.
